@@ -60,12 +60,10 @@ def login():
          
       return  render_template("login.html")
 
-@app.route("/dashboard")
-def dashboard():
-      return render_template("dashboard.html")
+@app.route("/layout")
+def layout():
+      return render_template("layout.html")
       
-
-
 @app.route('/logout')
 def logout():
     session.pop('user')         
@@ -75,9 +73,9 @@ def logout():
 # def layout():
 #     return  render_template("layout.html")
 
-@app.route("/about")
-def about():
-    return  render_template("about.html")
+@app.route("/dashboard")
+def dashboard():
+    return  render_template("dashboard.html")
 
 
 @app.route("/campaign")
