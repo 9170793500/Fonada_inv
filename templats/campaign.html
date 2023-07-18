@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
   <title>Campaign</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+ 
   <style>
     .row.content {height: 700px}
     .body{
@@ -20,13 +18,37 @@
     table,
     th,
     td {
-        border: 2px solid rgb(34, 31, 31);
+        border: 1px solid black;
     }
+    .report-header {
+        height: 60px;
+        padding: 10px 5px 5px 5px;
+    }
+    .report-header {
+      height: 80px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 10px 20px;
+      border-bottom: 2px solid rgba(252, 252, 253, 0.59);
+}
+.report-container {
+min-height: 300px;
+max-width: 1200px;
+margin: 70px auto 0px auto;
+background-color: #ffffff;
+border-radius: 30px;
+box-shadow: 3px 3px 10px rgb(188, 188, 188);
+padding: 0px 20px 20px 20px;}
   </style>
 
  
-
-      <div class="row" style="margin-left: 100px; margin-top: 50px;">
+    
+<div class="report-container">
+  <div class="report-header">
+    
+      <div class="row" style="margin-left: 3px; margin-top: 217px;">
         <div class="col-sm-9">
           <div class="well">
             
@@ -62,12 +84,16 @@
             {% endfor %}
           </tbody>
           </table>
-          <button type="button" style="background-color: blue; color: white; ;">See all</button>
+          <button type="button" style="background-color: blue; color: white; margin-top: 5px;">See all</button>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
+   
 
+
+</div>
 
 {% endblock %}
