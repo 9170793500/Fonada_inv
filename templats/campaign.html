@@ -1,0 +1,73 @@
+{% extends "dashboard.html" %}
+{% block body %}
+  <title>Campaign</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .row.content {height: 700px}
+    .body{
+     margin: auto;
+     padding: auto;
+    }
+    .sidenav {
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;} 
+    }
+    table,
+    th,
+    td {
+        border: 2px solid black;
+    }
+  </style>
+
+ 
+
+      <div class="row">
+        <div class="col-sm-9">
+          <div class="well">
+            
+            <table style="width:100%">
+              <thead>
+              <tr>
+                  <th>S no</th>
+                  <th>Device name</th>
+                  <th>Storage</th>
+                  <th>Serial number</th>
+                  <th>Ram</th>
+                  <th>Charger ser</th>
+                  <th>Mouse ser </th>
+                  <th>Extra device</th>
+                  <th>Assign</th>
+                  <th>Assign date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in system_inventry %}
+              <tr>
+                <td>{{item["sno"]}}</td>
+                <td>{{item["divice_name"]}}</td>
+                <td>{{item["storage"]}}</td>
+                <td>{{item["serial_number"]}}</td>
+                <td>{{item["ram"] }}</td>
+                <td>{{item["charger_serialnum"]}}</td>
+                <td>{{item["mouse_serialnum"]}}</td>
+                <td>{{item["extra_device"]}}</td>
+                <td>{{item["assign"]}}</td>
+                <td>{{item["assign_date"]}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          </table>
+          <button type="button" style="background-color: blue; color: white; ;">See all</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}
