@@ -6,9 +6,12 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__, template_folder='templats')
 app.secret_key = user = {"username": "fonada@125.com", "password": "fonada@123"}
   
+
+# local_server = True
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/sdm'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sdm'
 db = SQLAlchemy(app)
+
 
 class System_inventry(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -54,6 +57,7 @@ def login():
         if username == user['username'] and password == user['password']:
             session['user'] = username
             return redirect('/dashboard')
+         
         return  render_template("login.html" )
          
       return  render_template("login.html" )
@@ -67,9 +71,7 @@ def logout():
     session.pop('user')         
     return redirect('/login')
 
-# @app.route("/layout")
-# def layout():
-#     return  render_template("layout.html")
+
 
 @app.route("/dashboard")
 def dashboard():
