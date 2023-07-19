@@ -56,6 +56,7 @@ def login():
         password = request.form.get('password')     
         if username == user['username'] and password == user['password']:
             session['user'] = username
+            flash("this is logged")
             return redirect('/dashboard')
          
         return  render_template("login.html" )

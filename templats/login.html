@@ -1,3 +1,4 @@
+{% block body %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -131,6 +132,15 @@ span.psw {
 </style>
 </head>
 <body>
+  {% with messages = get_flashed_messages() %} 
+  {if messages %}
+  {% for message in messages %}
+   <div class="alert alert-primary" role="alert">
+    <span>{{message}}</span> <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
           
 
 <h2 style="color: white;">Fonada </h2>
@@ -178,3 +188,4 @@ window.onclick = function(event) {
 
 </body>
 </html>
+{% endblock %}
