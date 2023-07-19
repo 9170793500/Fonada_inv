@@ -1,16 +1,14 @@
 
-from flask import Flask,render_template,request,  redirect, session
+from flask import Flask, flash,render_template,request,  redirect, session
 from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__, template_folder='templats')
 app.secret_key = user = {"username": "fonada@125.com", "password": "fonada@123"}
- 
-# local_server = True
+  
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/sdm'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sdm'
 db = SQLAlchemy(app)
-
 
 class System_inventry(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -49,16 +47,16 @@ def contact():
 
 @app.route("/", methods = ['POST', 'GET'])
 def login():
+      
       if(request.method == 'POST'):
         username = request.form.get('username')
         password = request.form.get('password')     
         if username == user['username'] and password == user['password']:
             session['user'] = username
             return redirect('/dashboard')
+        return  render_template("login.html" )
          
-        return  render_template("login.html")
-         
-      return  render_template("login.html")
+      return  render_template("login.html" )
 
 @app.route("/layout")
 def layout():
