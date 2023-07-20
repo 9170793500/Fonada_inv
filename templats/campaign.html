@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
   <title>Campaign</title>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 html,
 body,
@@ -49,9 +49,10 @@ tr{
                           <div class="table-responsive" style="padding: 7px;">
                             
                             <div style="overflow-x:auto; background-color: aqua; " >
-                            <table class="table table-borderless" >
+                            <table class="table table-borderless" id="example" class="display" cellspacing="0" width="100%" st >
                               <thead >
-                                <tr class="sdm" style="padding: 10px; ">
+                               
+                                <tr >
                                 
                                    <th>S no</th>
                                   <th>Device name</th>
@@ -66,7 +67,9 @@ tr{
                                   
                                 </tr>
                               </thead>
+                              
                               <tbody >
+                                <tfoot>
                                 <tr >
                                 
                                   {% for item in system_inventry %}
@@ -81,8 +84,18 @@ tr{
                                     <td>{{item["extra_device"]}}</td>
                                     <td>{{item["assign"]}}</td>
                                     <td>{{item["assign_date"]}}</td>
-                                </tr>
-                            
+                                    <th >
+                                      <!-- <button class="edit" style="height: 30px; width: 45px;" type="edit">Edit</button> -->
+                                      
+                                      <button class="ed" style="color: #0a1aff;  width: 25px; background-color: aqua; border-color: aqua;"> &#9998;</button>
+                                      <button class="btn" style="color: red; width: 25px; background-color: aqua; border-color: aqua;"><i class="fa fa-trash"></i></button>
+                                      <!-- <button class="material-icons" style="color: rgb(255, 81, 12);"> &#xe872;</button> -->
+                                      <!-- <button class="Delete" style="height: 30px; width: 45px;" type="button" type="delete" value="delet">Delete</button> -->
+                                    </th>
+                                   
+
+                                  </tr>
+                                </tfoot>
                                 {% endfor %}
                               </tbody>
                             </table>

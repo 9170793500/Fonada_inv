@@ -50,7 +50,6 @@ def contact():
 
 @app.route("/", methods = ['POST', 'GET'])
 def login():
-      
       if(request.method == 'POST'):
         username = request.form.get('username')
         password = request.form.get('password')     
@@ -59,21 +58,22 @@ def login():
             flash('This is a flash message')
             return redirect('/dashboard')
         
-        flash(u'Invalid password provided')
+        flash(u'Invalid username  password')
         
         return  render_template("login.html" )
-        
       return  render_template("login.html" )
 
 @app.route("/layout")
 def layout():
       return render_template("layout.html")
+@app.route("/update")
+def update():
+      return render_template("update.html")
       
 @app.route('/logout')
 def logout():
     session.pop('user')         
     return redirect('/login')
-
 
 
 @app.route("/dashboard")
@@ -83,7 +83,7 @@ def dashboard():
 
 @app.route("/campaign")
 def campian():
-     system_inventry = System_inventry.query.filter_by().all()[0:4]
+     system_inventry = System_inventry.query.filter_by().all()[0:10]
      return  render_template("campaign.html" ,system_inventry=system_inventry)
 
 
