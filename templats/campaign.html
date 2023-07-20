@@ -1,99 +1,101 @@
 {% extends "layout.html" %}
 {% block body %}
   <title>Campaign</title>
- 
-  <style>
-    .row.content {height: 700px}
-    .body{
-     margin: auto;
-     padding: auto;
-    }
-    .sidenav {
-      background-color: #f1f1f1;
-      height: 100%;
-    }
-    @media screen and (max-width: 767px) {
-      .row.content {height: auto;} 
-    }
-    table,
-    th,
-    td {
-        border: 1px solid black;
-    }
-    .report-header {
-        height: 60px;
-        padding: 10px 5px 5px 5px;
-    }
-    .report-header {
-      height: 80px;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 20px 10px 20px;
-      border-bottom: 2px solid rgba(252, 252, 253, 0.59);
+
+<style>
+html,
+body,
+.intro {
+  height: 100%;
+  
 }
-.report-container {
-min-height: 300px;
-max-width: 1200px;
-margin: 70px auto 0px auto;
-background-color: #ffffff;
-border-radius: 30px;
-box-shadow: 3px 3px 10px rgb(188, 188, 188);
-padding: 0px 20px 20px 20px;}
-  </style>
+th, td {
+  padding: 3px;
+  text-align: left;
+}
+table td,
+table th {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+}
 
- 
-    
-<div class="report-container">
-  <div class="report-header">
-    
-      <div class="row" style="margin-left: 3px; margin-top: 217px;">
-        <div class="col-sm-9">
-          <div class="well">
-            
-            <table style="width:100%">
-              <thead>
-              <tr>
-                  <th>S no</th>
-                  <th>Device name</th>
-                  <th>Storage</th>
-                  <th>Serial number</th>
-                  <th>Ram</th>
-                  <th>Charger ser</th>
-                  <th>Mouse ser </th>
-                  <th>Extra device</th>
-                  <th>Assign</th>
-                  <th>Assign date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for item in system_inventry %}
-              <tr>
-                <td>{{item["sno"]}}</td>
-                <td>{{item["divice_name"]}}</td>
-                <td>{{item["storage"]}}</td>
-                <td>{{item["serial_number"]}}</td>
-                <td>{{item["ram"] }}</td>
-                <td>{{item["charger_serialnum"]}}</td>
-                <td>{{item["mouse_serialnum"]}}</td>
-                <td>{{item["extra_device"]}}</td>
-                <td>{{item["assign"]}}</td>
-                <td>{{item["assign_date"]}}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          </table>
-          <button type="button" style="background-color: blue; color: white; margin-top: 5px;">See all</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-   
-
-
-</div>
+.card {
+  border-radius: .5rem;
+}
+tr{
+  height: 1px;
+  
+}
+.mask-custom {
+  background: rgba(24, 24, 16, .2);
+  border-radius: 10px;
+  backdrop-filter: blur(25px);
+  border: 2px solid rgba(255, 255, 255, 0.05);
+  background-clip: padding-box;
+  box-shadow: 8px 8px 8px rgba(46, 54, 68, 0.03);
+}
+          </style>
+          
+          <section class="intro">
+            <div class="bg-image h-100"  style="background-color: #6095F0; padding: 3px;">
+              <div class="mask d-flex align-items-center h-100">
+                <div class="container" >
+                  <div class="row justify-content-center">
+                    <div class="col-12" >
+                      <div class="card shadow-2-strong" style="background-color: #f5f7fa;">
+                        <div class="card-body">
+                          <div class="table-responsive" style="padding: 7px;">
+                            
+                            <div style="overflow-x:auto; background-color: aqua; " >
+                            <table class="table table-borderless" >
+                              <thead >
+                                <tr class="sdm" style="padding: 10px; ">
+                                
+                                   <th>S no</th>
+                                  <th>Device name</th>
+                                  <th>Storage</th>
+                                  <th>Serial number</th>
+                                  <th>Ram</th>
+                                  <th>Charger ser</th>
+                                  <th>Mouse ser </th>
+                                  <th>Extra device</th>
+                                  <th>Assign</th>
+                                  <th>Assign date</th>
+                                  
+                                </tr>
+                              </thead>
+                              <tbody >
+                                <tr >
+                                
+                                  {% for item in system_inventry %}
+                                  <tr  >
+                                    <td>{{item["sno"]}}</td>
+                                    <td>{{item["divice_name"]}}</td>
+                                    <td>{{item["storage"]}}</td>
+                                    <td>{{item["serial_number"]}}</td>
+                                    <td>{{item["ram"] }}</td>
+                                    <td>{{item["charger_serialnum"]}}</td>
+                                    <td>{{item["mouse_serialnum"]}}</td>
+                                    <td>{{item["extra_device"]}}</td>
+                                    <td>{{item["assign"]}}</td>
+                                    <td>{{item["assign_date"]}}</td>
+                                </tr>
+                            
+                                {% endfor %}
+                              </tbody>
+                            </table>
+                          </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+      
 
 {% endblock %}

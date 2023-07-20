@@ -132,16 +132,20 @@ span.psw {
 </style>
 </head>
 <body>
-  {% with messages = get_flashed_messages() %} 
-  {if messages %}
-  {% for message in messages %}
-   <div class="alert alert-primary" role="alert">
-    <span>{{message}}</span> <a href="#" class="alert-link">an example link</a>. Give it a click if you like.
-  </div>
-  {% endfor %}
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+   {% for message in messages %}
+   <button type="button"  class="close" style="color: white; " data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">{{message}}</span>
+  </button>
+   <!-- <div class="alert alert-primary" role="alert">
+    This is a primary alert with <a href="#" class="alert-link">{{message}}
+  </div> -->
+   {% endfor %}
+   
   {% endif %}
-  {% endwith %}
-          
+ {% endwith %}
 
 <h2 style="color: white;">Fonada </h2>
 

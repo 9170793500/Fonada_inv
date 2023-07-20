@@ -56,11 +56,13 @@ def login():
         password = request.form.get('password')     
         if username == user['username'] and password == user['password']:
             session['user'] = username
-            flash("this is logged")
+            flash('This is a flash message')
             return redirect('/dashboard')
-         
+        
+        flash(u'Invalid password provided')
+        
         return  render_template("login.html" )
-         
+        
       return  render_template("login.html" )
 
 @app.route("/layout")
@@ -85,5 +87,5 @@ def campian():
      return  render_template("campaign.html" ,system_inventry=system_inventry)
 
 
-
-app.run(debug=True , port=8000 )
+if __name__ == '__main__':
+  app.run(debug=True , port=8000 )
