@@ -66,9 +66,10 @@ def login():
 @app.route("/layout")
 def layout():
       return render_template("layout.html")
-@app.route("/update")
-def update():
-      return render_template("update.html")
+@app.route("/edit", methods = ['POST', 'GET'] )
+def edit():
+    
+      return render_template("edit.html")
       
 @app.route('/logout')
 def logout():

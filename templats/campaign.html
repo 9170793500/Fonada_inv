@@ -42,7 +42,8 @@
     box-shadow: 8px 8px 8px rgba(46, 54, 68, 0.03);
   }
 </style>
-<form method="POST" action="/">
+
+<form method="post" action="/edit">
   
 
   <section class="intro">
@@ -92,12 +93,12 @@
                             <td>{{item["assign"]}}</td>
                             <td>{{item["assign_date"]}}</td>
                             <th>
-                              <!-- <button class="edit" style="height: 30px; width: 45px;" type="edit">Edit</button> -->
+                              <!-- <button class="button"  style="height: 30px; width: 45px;" type="submit">Edit</button> -->
                             
-                              <button class="ed"
+                              <button  class="open-button" onclick="openForm()"
                                 style="color: #0a1aff;  width: 25px; background-color: aqua; border-color: aqua;">
                                 &#9998;</button>
-                              
+                              </form>
                               <!-- <button class="btn" name="delete"
                                 style="color: red; width: 25px; background-color: aqua; border-color: aqua;"><i
                                   class="fa fa-trash"></i></button> -->
