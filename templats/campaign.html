@@ -3,116 +3,58 @@
 <title>Campaign</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-  html,
-  body,
-  .intro {
-    height: 100%;
-
-  }
-
-  th,
-  td {
-    padding: 3px;
-    text-align: left;
-  }
-
-  table td,
-  table th {
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 100%;
-  }
-
-  .card {
-    border-radius: .5rem;
-  }
-
-  tr {
-    height: 1px;
-
-  }
-
-  .mask-custom {
-    background: rgba(24, 24, 16, .2);
-    border-radius: 10px;
-    backdrop-filter: blur(25px);
-    border: 2px solid rgba(255, 255, 255, 0.05);
-    background-clip: padding-box;
-    box-shadow: 8px 8px 8px rgba(46, 54, 68, 0.03);
-  }
+  /* Your CSS styles here */
 </style>
 
-<form method="post" action="/edit">
-  
-
-  <section class="intro">
-    <div class="bg-image h-100" style="background-color: #6095F0; padding: 3px;">
-      <div class="mask d-flex align-items-center h-100">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-12">
-              <div class="card shadow-2-strong" style="background-color: #f5f7fa;">
-                <div class="card-body">
-                  <div class="table-responsive" style="padding: 7px;">
-
-                    <div style="overflow-x:auto; background-color: aqua; ">
-                      <table class="table table-borderless" id="example" class="display" cellspacing="0" width="100%"
-                        st>
-                        <thead>
-
-                          <tr>
-                            <th>S no</th>
-                            <th>Device name</th>
-                            <th>Storage</th>
-                            <th>Serial number</th>
-                            <th>Ram</th>
-                            <th>Charger ser</th>
-                            <th>Mouse ser </th>
-                            <th>Extra device</th>
-                            <th>Assign</th>
-                            <th>Assign date</th>
-
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                        <tfoot>
-                          <tr>
-
-                            {% for item in system_inventry %}
-                          <tr>
-                            <td>{{item["sno"]}}</td>
-                            <td>{{item["divice_name"]}}</td>
-                            <td>{{item["storage"]}}</td>
-                            <td>{{item["serial_number"]}}</td>
-                            <td>{{item["ram"] }}</td>
-                            <td>{{item["charger_serialnum"]}}</td>
-                            <td>{{item["mouse_serialnum"]}}</td>
-                            <td>{{item["extra_device"]}}</td>
-                            <td>{{item["assign"]}}</td>
-                            <td>{{item["assign_date"]}}</td>
-                            <th>
-                              <!-- <button class="button"  style="height: 30px; width: 45px;" type="submit">Edit</button> -->
-                            
-                              <button  class="open-button" onclick="openForm()"
-                                style="color: #0a1aff;  width: 25px; background-color: aqua; border-color: aqua;">
-                                &#9998;</button>
-                              </form>
-                              <!-- <button class="btn" name="delete"
-                                style="color: red; width: 25px; background-color: aqua; border-color: aqua;"><i
-                                  class="fa fa-trash"></i></button> -->
-                              <!-- <button class="material-icons" style="color: rgb(255, 81, 12);"> &#xe872;</button> -->
-                              <!-- <button class="Delete" style="height: 30px; width: 45px;" type="button" type="delete" value="delet">Delete</button> -->
-                            </th>
-
-
-                          </tr>
-                        </tfoot>
+<section class="intro">
+  <div class="bg-image h-100" style="background-color: #6095F0; padding: 3px;">
+    <div class="mask d-flex align-items-center h-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card shadow-2-strong" style="background-color: #f5f7fa;">
+              <div class="card-body">
+                <div class="table-responsive" style="padding: 7px;">
+                  <div style="overflow-x:auto; background-color: aqua;">
+                    <table class="table table-borderless" id="example" class="display" cellspacing="0" width="100%">
+                      <thead>
+                        <tr>
+                          <th>S no</th>
+                          <th>Device name</th>
+                          <th>Storage</th>
+                          <th>Serial number</th>
+                          <th>Ram</th>
+                          <th>Charger ser</th>
+                          <th>Mouse ser</th>
+                          <th>Extra device</th>
+                          <th>Assign</th>
+                          <th>Assign date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for item in system_inventry %}
+                        <tr>
+                          <td>{{ item["sno"] }}</td>
+                          <td>{{ item["divice_name"] }}</td>
+                          <td>{{ item["storage"] }}</td>
+                          <td>{{ item["serial_number"] }}</td>
+                          <td>{{ item["ram"] }}</td>
+                          <td>{{ item["charger_serialnum"] }}</td>
+                          <td>{{ item["mouse_serialnum"] }}</td>
+                          <td>{{ item["extra_device"] }}</td>
+                          <td>{{ item["assign"] }}</td>
+                          <td>{{ item["assign_date"] }}</td>
+                          <td>
+                            <form method="post" action="/edit/{{ item['sno'] }}">
+                              <button class="open-button" style="color: #0a1aff; width: 25px; background-color: aqua; border-color: aqua;">
+                                &#9998;
+                              </button>
+                            </form>
+                          </td>
+                        </tr>
                         {% endfor %}
-                        </tbody>
-                      </table>
-                    </div>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </div>
@@ -121,7 +63,7 @@
         </div>
       </div>
     </div>
-  </section>
-</form>
+  </div>
+</section>
 
 {% endblock %}

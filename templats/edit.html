@@ -3,132 +3,131 @@
 
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
     * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        text-align: center;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      text-align: center;
     }
 
     body {
-        font-family: 'Inter', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     .formbold-mb-3 {
-        margin-bottom: 15px;
+      margin-bottom: 15px;
     }
 
     .formbold-relative {
-        position: relative;
+      position: relative;
     }
 
     .formbold-opacity-0 {
-        opacity: 0;
+      opacity: 0;
     }
 
     .formbold-stroke-current {
-        stroke: #ffffff;
-        z-index: 999;
+      stroke: #ffffff;
+      z-index: 999;
     }
 
     .formbold-main-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
     }
 
     .formbold-form-wrapper {
-        margin: 0 auto;
-        max-width: 570px;
-        width: 100%;
-        background: white;
-        padding: 40px;
-    }
-    .formbold-input-flex {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 15px;
+      margin: 0 auto;
+      max-width: 570px;
+      width: 100%;
+      background: white;
+      padding: 40px;
     }
 
-   
+    .formbold-input-flex {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+
+
     .formbold-form-input {
-        width:55%;
-        padding: 13px 22px;
-        border-radius: 5px;
-        border: 1px solid #dde3ec;
-        background: #ffffff;
-        font-weight: 400;
-        font-size: 16px;
-        color: #536387;
-        outline: none;
-        /* resize: none; */
+      width: 55%;
+      padding: 13px 22px;
+      border-radius: 5px;
+      border: 1px solid #dde3ec;
+      background: #ffffff;
+      font-weight: 400;
+      font-size: 16px;
+      color: #536387;
+      outline: none;
+      /* resize: none; */
     }
 
     .formbold-form-label {
-        color: #073399;
-        font-size: 14px;
-        line-height: 24px;
-        display: block;
-        margin-bottom: 10px;
+      color: #073399;
+      font-size: 14px;
+      line-height: 24px;
+      display: block;
+      margin-bottom: 10px;
     }
-</style>
+  </style>
 </head>
+
 <body>
 
+  <form action="/editRecord/{{ sno }}" method="post">
+    <div class="formbold-main-wrapper">
+      <div class="formbold-form-wrapper">
+        <h1>Update Inventory</h1>
 
-  <form action="/" method="post">
-    <div class="form" id="myForm">
-    <h1>Update Inventry</h1>
+        <div class="formbold-mb-3">
+          <label for="storage" class="formbold-form-label"> <strong> Storage</strong></label>
+          <input type="text" name="storage" id="storage" placeholder="Storage" class="formbold-form-input" value="{{ item.storage }}" />
+        </div>
+        <div class="formbold-mb-3">
+          <label for="ram" class="formbold-form-label"><strong>Ram </strong></label>
+          <input type="text" name="ram" id="ram" class="formbold-form-input" placeholder="Ram" value="{{ item.ram }}" />
+        </div>
+        <div class="formbold-mb-3">
+          <label for="charger_serialnum" class="formbold-form-label"> <strong>Charger serial num </strong></label>
+          <input type="text" name="charger_serialnum" id="charger_serialnum" placeholder="Charger Serial Num" value="{{ item.charger_serialnum }}"
+            class="formbold-form-input" />
+        </div>
+        <div class="formbold-mb-3">
+          <label for="mouse_serialnum" class="formbold-form-label"> <strong> Mouse serial num </strong></label>
+          <input type="text" name="mouse_serialnum" id="mouse_serialnum" placeholder="Mouse Serial Num" value="{{ item.mouse_serialnum }}"
+            class="formbold-form-input formbold-mb-3" />
+        </div>
+        <div class="formbold-mb-3">
+          <label for="extra_device" class="formbold-form-label"> <strong> Extra device </strong></label>
+          <input type="text" name="extra_device" id="extra_device" value="{{ item.extra_device }}" placeholder="Extra Device"
+            class="formbold-form-input formbold-mb-3" />
+        </div>
+        <div class="formbold-mb-3">
+          <label for="assign" class="formbold-form-label"> <strong> Assign </strong></label>
+          <input type="text" name="assign" id="assign" value="{{ item.assign }}" placeholder="Assign" class="formbold-form-input formbold-mb-3" />
+        </div>
 
-    <div class="formbold-mb-3">
-      <label for="age" class="formbold-form-label"> <strong> Storage</strong></label>
-      <input type="text" name="storage" id="storage" placeholder="storage" class="formbold-form-input" />
-  </div>
-  <div class="formbold-mb-3">
-    <label for="dob" class="formbold-form-label"><strong>Ram </strong></label>
-    <input type="text" name="ram" id="ram" class="formbold-form-input" placeholder="ram"  />
-</div>
-<div class="formbold-mb-3">
-  <label for="email" class="formbold-form-label"> <strong>Charger serial num </strong></label>
-  <input type="charger_serialnum" name="charger_serialnum" id="charger_serialnum"
-      placeholder="charger_serialnum" class="formbold-form-input"  />
-</div>
-<div class="formbold-mb-3">
-  <label for="address" class="formbold-form-label"> <strong> Mouse serial num </strong></label>
-  <input type="text" name="mouse_serialnum" id="mouse_serialnum" placeholder="mouse serialnum"
-      class="formbold-form-input formbold-mb-3" />
-</div>
-<div class="formbold-mb-3">
-  <label for="address" class="formbold-form-label"> <strong> Extra device </strong></label>
-  <input type="text" name="extra_device" id="extra_device" placeholder="extra_device"
-      class="formbold-form-input formbold-mb-3" />
-</div>
-<div class="formbold-mb-3">
-  <label for="address" class="formbold-form-label"> <strong> Assign </strong></label>
-  <input type="text" name="assign" id="assign" placeholder="assign"
-      class="formbold-form-input formbold-mb-3" />
-</div>
+        <div class="formbold-mb-3">
+          <label for="assign_date" class="formbold-form-label"><strong> Assign date </strong></label>
+          <input type="date" name="assign_date" id="assign_date" value="{{ item.assign_date }}" placeholder="Assign Date" class="formbold-form-input" />
+        </div>
 
-<div class="formbold-mb-3">
-  <label for="post" class="formbold-form-label"><strong> Assign date </strong></label>
-  <input type="date" name="assign_date" id="assign_date" placeholder="assign_date" class="formbold-form-input" />
-</div>
-
-    
-
-    <button  style="background-color: #008CBA; padding: 12px 28px;" type="update" href="/edit" class="btn">Update</button>
-    
-  </div>
-</form>
-
+        <button class="btn" style="background-color: #008CBA; padding: 12px 28px;" type="submit">Update</button>
+      </div>
+    </div>
+  </form>
 </body>
+
 </html>
-
-
 {% endblock %}
