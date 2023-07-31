@@ -1,5 +1,71 @@
 {% extends "layout.html" %}
 {% block body %}
+<style>
+    .box {
+        height: 111px;
+        width: 157px;
+    }
+
+    input[type=submit] {
+        background-color: #62529c;
+        border: none;
+        color: #fff;
+        padding: 15px 30px;
+        text-decoration: none;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 20px;
+    }
+
+    table {
+        
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 10px;
+
+    }
+
+    th {
+        height: 30px;
+    }
+
+    td {
+        text-align: center;
+    }
+
+    th,
+    td {
+        
+        padding: 5px;
+        text-align: left;
+
+    }
+    .fixed_header {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+      }
+      .fixed_header tbody {
+        display: block;
+        width: 100%;
+        overflow: auto;
+        height: 224px;
+      }
+      .fixed_header thead tr {
+        display: block;
+      }
+      .fixed_header thead {
+        background: rgb(62, 95, 202);
+        color: #fff;
+      }
+      .fixed_header th,
+      .fixed_header td {
+        padding: 5px;
+        text-align: left;
+        width: 500px;}
+
+  
+</style>
 
 <!-- {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -10,51 +76,118 @@
  {% endfor %}
 {% endif %}
 {% endwith %} -->
+
 <div class="box-container">
     <div class="box box1">
         <div class="text">
-            <h2 class="topic-heading">60.5k</h2>
-            <h2 class="topic">Article Views</h2>
+            <h2 class="topic-heading">{{ total }}</h2>
+            <h2 class="topic">System quntity</h2>
         </div>
-        <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
             alt="Views">
     </div>
     <div class="box box2">
         <div class="text">
-            <h2 class="topic-heading">150</h2>
-            <h2 class="topic">Likes</h2>
+            <h2 class="topic-heading">{{total_sno}}</h2>
+            <h2 class="topic">Total device</h2>
         </div>
-        <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png"
-            alt="likes">
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png" alt="likes">
     </div>
     <div class="box box3">
         <div class="text">
-            <h2 class="topic-heading">320</h2>
-            <h2 class="topic">Comments</h2>
+            <h2 class="topic-heading">{{assign}}</h2>
+            <h2 class="topic">Assign </h2>
         </div>
-        <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
             alt="comments">
     </div>
     <div class="box box4">
         <div class="text">
-            <h2 class="topic-heading">70</h2>
-            <h2 class="topic">Published</h2>
+            <h2 class="topic-heading">{{quntity}}</h2>
+            <h2 class="topic">Mouse device </h2>
         </div>
-        <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
     </div>
 </div>
+
 <div class="report-container">
     <div class="report-header">
-        <h1 class="recent-Articles">Recent Articles</h1>
-        <button class="view">View All</button>
+        <h1 class="recent-Articles">Stock Data</h1>
+        <!-- <a href="/stock_add">  <button class="btn btn-primary" style="background-color: blue; color: white;" type="submit">Add stock </button></a> -->
+        <a href="/stock_add"> <input type="submit" value="Add stock data"></a>
+
     </div>
+    
+        <table  class="fixed_header" >
+
+            <thead class="table-dark">
+                <tr>
+                    <th>S no</th>
+                    <th> Device Name</th>
+                    <th>Brand</th>
+                    <th>Specification</th>
+                    <th>Serial number</th>
+                    <th>Other device</th>
+                    <th>Quntity</th>
+                </tr>
+            </thead>
+          
+            <tbody class="table-group-divider table-divider-color">
+
+                {% for item in stock %}
+                <tr>
+                    <th scope="row">{{ item["sno"] }}</th>
+                    <td>{{ item["name"] }}</td>
+                    <td>{{ item["brand"] }}</td>
+                    <td>{{ item["Specification"] }} </td>
+                    <td>{{ item["sr_number"] }}</td>
+                    <td>{{ item["other_device"] }}</td>
+                    <td>{{ item["quntity"] }}</td>
+                   
+                </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    
+</div>
+<div class="report-container" style="position: sticky;" >
+    <div class="report-header">
+        <h1 class="recent-Articles">Mouse Stock Data</h1>
+        <a href="/mouse_add"> <input type="submit" value="Mouse stock data"></a>
+
     </div>
-    </div>
+    
+    <table  class="fixed_header" >
+
+        <thead class="table-dark">
+            <tr>
+                <th>S no</th>
+                <th> Device Name</th>
+                <th>Brand</th>
+                <th>Serial number</th>
+                <th>Quntity</th>
+            </tr>
+        </thead>
+
+        <tbody class="table-group-divider table-divider-color">
+
+            {% for mos in mouse %}
+            <tr>
+                <th scope="row">{{ mos["sno"] }}</th>
+                <td>{{ mos["device_name"] }}</td>
+                <td>{{ mos["brand"] }}</td>
+                <td>{{ mos["serial_number"] }}</td>
+                <td>{{ mos["quntity"] }}</td>
+             
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 </div>
 </div>
-</div>
+
+
+
 {% endblock %}

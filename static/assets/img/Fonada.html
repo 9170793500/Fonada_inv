@@ -1,14 +1,9 @@
-
-
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible"
-		content="IE=edge">
-	<meta name="viewport"
-		content="width=device-width,
+<!-- saved from url=(0031)http://127.0.0.1:8000/stock_add -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,
 				initial-scale=1.0">
 	<title>Fonada</title>
    <style>
@@ -526,47 +521,38 @@ border-radius: 4px;
 
 	<!-- for header part -->
 	<header>
-     <div class="con" >
+     <div class="con">
 		<div class="logosec">
-			<div class="logo" style="color: white;" >Fonada</div>
+			<div class="logo" style="color: white;">Fonada</div>
 		
-		</div  >
+		</div>
 
-	</header>
+	</div></header>
 
 
 	<div class="main-container" style="  position: fixed;">
-		<div class="navcontainer" >
-			<nav class="nav" >
+		<div class="navcontainer">
+			<nav class="nav">
 				<div class="nav-upper-options" style=" background-color: #1616cf;">
-                    <a href="/dashboard">
-                        <div class="option2 nav-option" style="font-size: 12px; background-color: #1616cf;" >
-                            <img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
-                            class="nav-img"
-                            alt="dashboard">
+                    <a href="http://127.0.0.1:8000/dashboard">
+                        <div class="option2 nav-option" style="font-size: 12px; background-color: #1616cf;">
+                            <img src="./Fonada_files/Untitled-design-(29).png" class="nav-img" alt="dashboard">
                             <h3 style="color: white; "> Dashboard</h3>
                     
                         </div>
 					
                 </a>
-                    <a href="/campaign">
-                    <div class="option2 nav-option" style="font-size: 12px;  background-color: #1616cf;" >
-                        <img  src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/9.png"
-                            class="nav-img"
-                            alt="articles">
+                    <a href="http://127.0.0.1:8000/campaign">
+                    <div class="option2 nav-option" style="font-size: 12px;  background-color: #1616cf;">
+                        <img src="./Fonada_files/9.png" class="nav-img" alt="articles">
                         <h3 style="color: white;"> Inventry</h3>
                 
                     </div>
                 </a>
-                    <a href="/system_inventry">
-                    <div class="nav-option option3" style="font-size: 12px;  background-color: #1616cf;" >
+                    <a href="http://127.0.0.1:8000/system_inventry">
+                    <div class="nav-option option3" style="font-size: 12px;  background-color: #1616cf;">
                     
-                        <img  src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210183320/5.png"
-                            class="nav-img"
-                            alt="report">
+                        <img src="./Fonada_files/5.png" class="nav-img" alt="report">
                       
                         <h3 style="color: white;"> Add Data</h3>
                     
@@ -574,13 +560,10 @@ border-radius: 4px;
                 </a>
                
 
-                    <a href="/">
+                    <a href="http://127.0.0.1:8000/">
 					<div class="nav-option logout" style="font-size: 12px; background-color: #1616cf;">
-						<img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
-							class="nav-img"
-							alt="logout">
-						<h3 style="color: white; " >Logout</h3>
+						<img src="./Fonada_files/7.png" class="nav-img" alt="logout">
+						<h3 style="color: white; ">Logout</h3>
 					</div>
                 </a>
 				</div>
@@ -589,24 +572,137 @@ border-radius: 4px;
 		<div class="main">
 
 			<div class="searchbar2">
-				<input type="text"
-					name=""
-					id=""
-					placeholder="Search">
+				<input type="text" name="" id="" placeholder="Search">
 				<div class="searchbtn">
-				<img src=
-"https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
-						class="icn srchicn"
-						alt="search-button">
+				<img src="./Fonada_files/Untitled-design-(28).png" class="icn srchicn" alt="search-button">
 				</div>
 			</div>
 
-    {% block body %}
-    {% endblock %}
-
-</body>
-</html>
+    
 
 
 
+  
+    <title>Stock add data</title>
+     <link rel="stylesheet" href="./Fonada_files/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+ 
+    <style>
+        .body{
+            margin: 0px;
+            padding: 0px;
+            
+        }
+      html, body {
+      min-height: 100%;
+      padding: 0;
+      margin: 0;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      
+      }
+      h1 {
+      margin: 0 0 20px;
+      font-weight: 400;
+      color: #1c87c9;
+      }
+      p {
+      margin: 0 0 5px;
+      }
+      .main-block {
+        
+     
+   
+      justify-content: center;
+      align-items: center;
+      
+   
+      }
+      form {
+      padding: 25px;
+      margin: 25px;
+      box-shadow: 0 2px 5px #f5f5f5; 
+      background: #f5f5f5; 
+      margin-left: 245px;
+      }
+      .fas {
+      margin: 25px 10px 0;
+      font-size: 72px;
+      color: #fff;
+      }
+      .fa-envelope {
+      transform: rotate(-20deg);
+      }
+      .fa-at , .fa-mail-bulk{
+      transform: rotate(10deg);
+      }
+      input, textarea {
+      width: calc(100% - 18px);
+      padding: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #1c87c9;
+      outline: none;
+      }
+      input::placeholder {
+      color: #666;
+      }
+      button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      background: #1c87c9; 
+      font-size: 16px;
+      font-weight: 400;
+      color: #fff;
+      }
+      button:hover {
+      background: #2371a0;
+      }    
+      @media (min-width: 568px) {
+      .main-block {
+      flex-direction: row;
+      }
+      .left-part, form {
+      width: 50%;
+      }
+      .fa-envelope {
+      margin-top: 0;
+      margin-left: 0%;
+      }
+      .fa-at {
+      margin-top: 5%;
+      margin-left: 5%;
+      }
+      .fa-mail-bulk {
+      margin-top: 2%;
+      margin-left: 8%;
+      }
+      }
+    </style>
+  
+  
 
+      <form action="http://127.0.0.1:8000/stock_add" method="POST">
+        <h1> Add Stock Data </h1>
+        <div class="info">
+          <input class="fname" type="text" name="name" placeholder="Name">
+          <input type="text" name="brand" placeholder="Brand">
+          <input type="text" name="sr_number" placeholder="Srial number">
+          <input type="text" name="other_device" placeholder="Other device">
+          <input type="text" name="quntity" placeholder="Quntity">
+        </div>
+       
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  
+
+
+
+
+
+
+
+
+
+</div></body></html>
