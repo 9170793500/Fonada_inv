@@ -1,14 +1,12 @@
 
-from flask import Flask, flash, render_template, request,url_for,  redirect, session
+from flask import Flask, flash, render_template, request, url_for,  redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
-
 
 
 app = Flask(__name__, template_folder='templats')
 app.secret_key = user = {
     "username": "fonada@125.com", "password": "fonada@123"}
-
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/sdm'
@@ -28,6 +26,7 @@ class System_inventry(db.Model):
     assign = db.Column(db.String(20), nullable=False)
     assign_date = db.Column(db.String(20), nullable=False)
 
+
 class Stock(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -37,15 +36,18 @@ class Stock(db.Model):
     other_device = db.Column(db.String(50), nullable=False)
     quntity = db.Column(db.String(100), nullable=False)
 
+
 class Mouse(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
     device_name = db.Column(db.String(100), nullable=False)
     brand = db.Column(db.String(100), nullable=False)
     serial_number = db.Column(db.String(100), nullable=False)
-    quntity = db.Column(db.String(200), nullable=False)   
+    quntity = db.Column(db.String(200), nullable=False)
+
 
 @app.route("/system_inventry", methods=['GET', 'POST'])
 def contact():
+
     if (request.method == 'POST'):
         divice_name = request.form.get('divice_name')
         storage = request.form.get('storage')
@@ -66,15 +68,15 @@ def contact():
 
 @app.route("/campaign")
 def campian():
-    
     system_inventry = System_inventry.query.filter_by().all()[0:10]
-   
-    return render_template("campaign.html", system_inventry=system_inventry )
+    return render_template("campaign.html", system_inventry=system_inventry  )
+
 
 @app.route("/edit/<int:sno>", methods=['GET', 'POST'])
 def edit(sno):
-     item = System_inventry.query.filter_by(sno=sno).first()
-     return render_template('edit.html', item=item, sno=sno)
+    item = System_inventry.query.filter_by(sno=sno).first()
+    return render_template('edit.html', item=item, sno=sno)
+
 
 @app.route("/update/<int:sno>", methods=['GET', 'POST'])
 def editRecord(sno):
@@ -102,6 +104,7 @@ def editRecord(sno):
 
     return campian()
 
+
 @app.route("/", methods=['POST', 'GET'])
 def login():
     if (request.method == 'POST'):
@@ -122,6 +125,7 @@ def login():
 def layout():
     return render_template("layout.html")
 
+
 @app.route('/logout')
 def logout():
     session.pop('user')
@@ -133,14 +137,18 @@ def dashboard():
     total = db.session.query(func.sum(Stock.quntity)).scalar()
     total = total or 0
     total_sno = db.session.query(func.count(Stock.sno)).scalar()
+    total_item = db.session.query(func.count(System_inventry.assign)).scalar()
+    print(total_item)
     quntity = db.session.query(func.count(Mouse.quntity)).scalar()
-    quntity= quntity or 0
+    quntity = quntity or 0
     
     mouse = Mouse.query.filter_by().all()[0:10]
     stock = Stock.query.filter_by().all()[0:10]
-    return render_template("dashboard.html" , stock =stock ,mouse=mouse ,total_sno=total_sno ,total=total ,quntity = quntity ) #, stock =stock  
+    # , stock =stock
+    return render_template("dashboard.html", stock=stock, mouse=mouse, total_sno=total_sno, total=total, quntity=quntity,total_item=total_item)
 
-@app.route("/stock_add", methods=['GET','POST'])
+
+@app.route("/stock_add", methods=['GET', 'POST'])
 def stock_add():
     if (request.method == 'POST'):
         name = request.form.get('name')
@@ -148,24 +156,28 @@ def stock_add():
         Specification = request.form.get('Specification')
         sr_number = request.form.get('sr_number')
         other_device = request.form.get('other_device')
-        quntity= request.form.get('quntity')
+        quntity = request.form.get('quntity')
 
-        add_stock=Stock(name=name , brand = brand , Specification=Specification , sr_number=sr_number ,other_device=other_device ,quntity=quntity)
+        add_stock = Stock(name=name, brand=brand, Specification=Specification,
+                          sr_number=sr_number, other_device=other_device, quntity=quntity)
         db.session.add(add_stock)
         db.session.commit()
     return render_template("stock_add.html")
 
-@app.route("/mouse_add" , methods=['GET','POST'])
+
+@app.route("/mouse_add", methods=['GET', 'POST'])
 def mouse_add():
     if (request.method == 'POST'):
         device_name = request.form.get('device_name')
         brand = request.form.get('brand')
         serial_number = request.form.get('serial_number')
-        quntity= request.form.get('quntity')
-        mouse=Mouse( device_name = device_name , brand = brand ,  serial_number=serial_number, quntity=quntity)
+        quntity = request.form.get('quntity')
+        mouse = Mouse(device_name=device_name, brand=brand,
+                      serial_number=serial_number, quntity=quntity)
         db.session.add(mouse)
         db.session.commit()
     return render_template("mouse_add.html")
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

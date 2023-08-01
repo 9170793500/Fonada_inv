@@ -1,5 +1,26 @@
 {% extends "layout.html" %}
 {% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+<script>
+    $(document).ready(function(){
+  $("#my_Input").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#my_Table tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 <style>
     .box {
         height: 111px;
@@ -64,8 +85,12 @@
         text-align: left;
         width: 500px;}
 
-  
+    .cd{
+        margin-left: 365px;
+        margin-top: 60px;
+    }
 </style>
+
 
 <!-- {% with messages = get_flashed_messages() %}
 {% if messages %}
@@ -81,7 +106,7 @@
     <div class="box box1">
         <div class="text">
             <h2 class="topic-heading">{{ total }}</h2>
-            <h2 class="topic">System quntity</h2>
+            <h2 class="topic">System Quntity</h2>
         </div>
         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
             alt="Views">
@@ -89,14 +114,14 @@
     <div class="box box2">
         <div class="text">
             <h2 class="topic-heading">{{total_sno}}</h2>
-            <h2 class="topic">Total device</h2>
+            <h2 class="topic">System Total Device</h2>
         </div>
         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png" alt="likes">
     </div>
     <div class="box box3">
         <div class="text">
-            <h2 class="topic-heading">{{assign}}</h2>
-            <h2 class="topic">Assign </h2>
+            <h2 class="topic-heading">{{total_item}}</h2>
+            <h2 class="topic">Assign Data</h2>
         </div>
         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
             alt="comments">
@@ -104,13 +129,17 @@
     <div class="box box4">
         <div class="text">
             <h2 class="topic-heading">{{quntity}}</h2>
-            <h2 class="topic">Mouse device </h2>
+            <h2 class="topic">Mouse Device </h2>
         </div>
         <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
     </div>
 </div>
+<!-- <div class="cd">
+    <input type="search" id="gsearch" name="gsearch">
+    <input type="submit">
+</div> -->
 
-<div class="report-container">
+<div class="report-container" >
     <div class="report-header">
         <h1 class="recent-Articles">System Stock Data</h1>
         <!-- <a href="/stock_add">  <button class="btn btn-primary" style="background-color: blue; color: white;" type="submit">Add stock </button></a> -->
@@ -119,6 +148,7 @@
     </div>
     
         <table  class="fixed_header" >
+            <input style="width: 257px;margin-top: 10px;" id="my_Input" type="text" placeholder="Search..">
 
             <thead class="table-dark">
                 <tr>
@@ -132,7 +162,7 @@
                 </tr>
             </thead>
           
-            <tbody class="table-group-divider table-divider-color">
+            <tbody class="table-group-divider table-divider-color"  id="my_Table">
 
                 {% for item in stock %}
                 <tr>
@@ -159,8 +189,8 @@
     </div>
     
     <table  class="fixed_header" >
-
-        <thead class="table-dark">
+        <input style="    width: 257px;margin-top: 10px;" id="myInput" type="text" placeholder="Search..">
+        <thead class="table-dark" >
             <tr>
                 <th>S no</th>
                 <th> Device Name</th>
@@ -170,7 +200,7 @@
             </tr>
         </thead>
 
-        <tbody class="table-group-divider table-divider-color">
+        <tbody class="table-group-divider table-divider-color" id="myTable">
 
             {% for mos in mouse %}
             <tr>
