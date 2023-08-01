@@ -207,11 +207,11 @@
             transition: all 0.1s ease-in-out;
         }
 
-        .nav-option:hover {
+        /* .nav-option:hover {
             border-left: 5px solid #a2a2a2;
             background-color: #32fff5;
             cursor: pointer;
-        }
+        } */
 
         .nav-img {
             height: 30px;
@@ -231,10 +231,10 @@
             cursor: pointer;
         }
 
-        .option1:hover {
+        /* .option1:hover {
             border-left: 5px solid #59f4ffaf;
             background-color: #51c4f1af;
-        }
+        } */
 
         .box {
             height: 130px;
@@ -249,9 +249,9 @@
             transition: transform 0.3s ease-in-out;
         }
 
-        .box:hover {
+        /* .box:hover {
             transform: scale(1.08);
-        }
+        } */
 
         .box:nth-child(1) {
             background-color: var(--one-use-color);
