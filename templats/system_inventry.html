@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 
-
+<!-- 
 <div class="formbold-main-wrapper">
     <div class="formbold-form-wrapper">
         <form action="/system_inventry" method="POST">
@@ -264,6 +264,130 @@
     .formbold-w-45 {
         width: 45%;
     }
+</style> -->
+
+<style>
+    /* Reset some default styles */
+    body, h1, h2, p, ul, li {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Container styles */
+    .container {
+        margin: 20px auto;
+        max-width: 800px;
+        padding: 0 20px;
+    }
+
+    /* Event Card styles */
+    .event-card {
+        border: 1px solid #ccc;
+        padding: 20px;
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+    }
+
+    /* Event Header styles */
+    .event-header {
+        display: flex;
+        align-items: center;
+    }
+
+    .event-header img {
+        max-width: 100px;
+        margin-right: 20px;
+    }
+
+    .event-title {
+        margin: 10px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    /* Event Date styles */
+    .event-date {
+        font-weight: bold;
+        color: #555;
+    }
+
+    /* Button styles */
+    .btn {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #6a64f1;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #5248ea;
+    }
+    /* Add this CSS for floating the event info to the right */
+.event-details {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+}
+
+.event-info {
+    text-align: right;
+    margin-left: 20px; /* Add some spacing between date and description */
+}
+
+/* Clear the float after the event info */
+.clear {
+    clear: both;
+}
+.form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 </style>
+
+
+<div class="container">
+    <h1>Event </h1>
+    <!-- Date Picker for Start Date -->
+    <div class="form-group"style=" margin: 21px;">
+        <label for="start-date">Start Date:</label>
+        <input  style=" padding: 8px; " type="date" class="form-control" id="start-date">
+    </div>
+    <!-- Date Picker for End Date -->
+    <div class="form-group"style=" margin: 21px;padding: 8px; ">
+        <label for="end-date">End Date:</label>
+        <input type="date" style=" padding: 8px; " class="form-control" id="end-date">
+    </div>
+
+
+    <button class="btn btn-primary">search</button>
+    <!-- Event Data Display -->
+    <div class="event-card">
+        <div class="event-header">
+            <img src="/static/assets/img/rakhi.jpg" alt="Event Image" height="100px">
+            <h2 class="event-title"  style="    margin-top: -57px;">Event Rakhi</h2>
+        </div>
+        <div class="event-details" >
+            <p class="event-date">Event Date: August 30, 2023</p>
+            <p class="event-description" margin-top: -52px;>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin id justo vel felis venenatis bibendum.</p>
+            <br>
+            <br>
+            <a href="#" class="btn btn-primary">Register</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

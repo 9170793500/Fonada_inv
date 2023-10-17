@@ -1,24 +1,27 @@
 
-import datetime
-from flask import Flask, flash, jsonify, render_template, request, url_for,  redirect, session
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import func
-from flask_cors import CORS
 
+import bcrypt
+import datetime
+from flask import Flask, flash, jsonify, make_response, render_template, request, url_for,  redirect, session
+from flask_sqlalchemy import SQLAlchemy
+
+from flask_cors import CORS
+import requests
+from sqlalchemy import func
 
 
 app = Flask(__name__, template_folder='templats')
+
 app.secret_key = user = {
     "username": "fonada@125.com", "password": "fonada@123"}
-
+app.secret_key= 'secret_key'
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/sdm'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sdm'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sm'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sdm'
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
-
 
 
 class System_inventry(db.Model):
@@ -32,20 +35,18 @@ class System_inventry(db.Model):
     extra_device = db.Column(db.String(50), nullable=False)
     assign = db.Column(db.String(50), nullable=False)
     assign_date = db.Column(db.String(20), nullable=False)
- 
 
-
-class Crpm(db.Model):
-        transactionId = db.Column(db.String,primary_key=True)
-        recpient = db.Column(db.String(1000), nullable=False)
-        sender = db.Column(db.String(1000), nullable=False)
-        description = db.Column(db.String(1000), nullable=False)
-        totalPdu = db.Column(db.String(1000), nullable=False)
-        deliverystatus = db.Column(db.String(1000), nullable=False)
-        deliverydt = db.Column(db.String(500), nullable=False)
-        submitdt = db.Column(db.String(500), nullable=False)
-        corelationId = db.Column(db.String(1000), nullable=False)
-        message = db.Column(db.String(1000), nullable=False)
+# class Crpm(db.Model):
+#         transactionId = db.Column(db.String,primary_key=True)
+#         recpient = db.Column(db.String(1000), nullable=False)
+#         sender = db.Column(db.String(1000), nullable=False)
+#         description = db.Column(db.String(1000), nullable=False)
+#         totalPdu = db.Column(db.String(1000), nullable=False)
+#         deliverystatus = db.Column(db.String(1000), nullable=False)
+#         deliverydt = db.Column(db.String(500), nullable=False)
+#         submitdt = db.Column(db.String(500), nullable=False)
+#         corelationId = db.Column(db.String(1000), nullable=False)
+#         message = db.Column(db.String(1000), nullable=False)
 
 
 class Stock(db.Model):
@@ -55,7 +56,7 @@ class Stock(db.Model):
     Specification = db.Column(db.String(500), nullable=False)
     sr_number = db.Column(db.String(100), nullable=False)
     other_device = db.Column(db.String(50), nullable=False)
-    quntity = db.Column(db.String(100), nullable=False)
+    quantity = db.Column(db.String(100), nullable=False)
 
 
 class Mouse(db.Model):
@@ -66,54 +67,131 @@ class Mouse(db.Model):
     quantity = db.Column(db.String(200), nullable=False)
 
 
-@app.route('/api/get_sms', methods=['GET'])
-def get_sms():
-    sms_list = []
+class Login(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(45), nullable=False)
+    password = db.Column(db.String(45), nullable=False)
 
-    sdm = Crpm.query.all()
+def __init__(self, username, password):
+        self.username = username
+        self.password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-    for entry in sdm:
-        sms_list=({
-            'transactionId': entry.transactionId,
-            'recipient': entry.recpient,
-            'sender': entry.sender,
-            'description': entry.description,
-            'totalPdu': entry.totalPdu,
-            'deliverystatus': entry.deliverystatus,
-            'deliverydt': entry.deliverydt,
-            'submitdt': entry.submitdt,
-            'corelationId': entry.corelationId,
-            'message': entry.message
-        })
-
-    print('transactionId')
-    return jsonify(sms_list)
+def check_password(self, password):
+        return bcrypt.checkpw(password.encode('utf-8'), self.password_hash.encode('utf-8'))
 
 
-@app.route('/api/add_sms', methods=['POST'])
-def add_sms():
+with app.app_context():
+    db.create_all()
+
+
+@app.route('/register', methods=['POST'])
+def register():
     if request.method == 'POST':
         data = request.json
-        
-        sms = Crpm(
-            transactionId=data.get('transactionId'),
-            recpient=data.get('recpient'),
-            sender=data.get('sender'),
-            description=data.get('description'),
-            totalPdu=data.get('totalPdu'),
-            status=data.get('status'),
-            doneDate=data.get('doneDate'),
-            submittedDate=data.get('submittedDate'),
-            corelationid=data.get('corelationid'),
-            message=data.get('message')
-        )
-        
-        db.session.add(sms)
-        db.session.commit()
-        
-        return jsonify({'message': 'Crpm data added successfully'})
-    
+        username = data['username']
+        password = data['password']
 
+    new_user = Login(username=username, password=password)
+    db.session.add(new_user)
+    db.session.commit()
+    print(new_user)
+    return jsonify({'message': 'User registered successfully'}, 200)
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = Login.query.filter_by(username=username).first()
+
+        if user and user.check_password(password):
+            session['username'] = user.username
+            session['password'] = user.password
+            return jsonify({"massage": "login succesfully"})
+        else:
+            return jsonify({"massage": "login unsuccesfully"})
+        
+    return "login complete"
+
+
+# @app.route('/api/sms', methods=['GET'])
+# def sms():
+#     if request.method == 'GET':
+#         transactionId = request.args.get('transactionId')
+#         recpient = request.args.get('recpient')
+#         sender = request.args.get('sender')
+#         description = request.args.get('description')
+#         totalPdu = request.args.get('totalPdu')
+#         deliverystatus = request.args.get('deliverystatus')
+#         deliverydt = request.args.get('deliverydt')
+#         submitdt = request.args.get('submitdt')
+#         corelationId = request.args.get('corelationId')
+#         message = request.args.get('message')
+
+#         item_data = Crpm.query
+
+#         if transactionId:
+#             query = item_data.filter(Crpm.transactionId == transactionId)
+#         if recpient:
+#             query = item_data.filter(Crpm.recpient == recpient)
+#         if sender:
+#             query = item_data.filter(Crpm.sender == sender)
+#         if description:
+#             query = item_data.filter(Crpm.description == description)
+#         if totalPdu:
+#             query = item_data.filter(Crpm.totalPdu == totalPdu)
+#         if deliverystatus:
+#             query = item_data.filter(Crpm.deliverystatus == deliverystatus)
+#         if deliverydt:
+#             query = item_data.filter(Crpm.deliverydt == deliverydt)
+#         if submitdt:
+#             query = item_data.filter(Crpm.submitdt == submitdt)
+#         if corelationId:
+#             query = item_data.filter(Crpm.corelationId == corelationId)
+#         if message:
+#             query = item_data.filter(Crpm.message == message)
+
+
+#         new_entry = Crpm(
+#              transactionId=transactionId,
+#              recpient=recpient,
+#              sender=sender,
+#              description=description,
+#              totalPdu=totalPdu,
+#              deliverystatus=deliverystatus,
+#              deliverydt=deliverydt,
+#              submitdt=submitdt,
+#              corelationId=corelationId,
+#              message=message)
+
+
+#         db.session.add(new_entry)
+#         db.session.commit()
+
+#         return jsonify(make_response({"payload": new_entry.to_json()}, 200))
+
+
+# @app.route('/api/sms', methods=[ 'POST'])
+# def data_add():
+#     if request.method == 'POST':
+#         data = request.json
+#         new_entry = Crpm(
+#             transactionId=data['transactionId'],
+#             recpient=data['recpient'],
+#             sender=data['sender'],
+#             description=data['description'],
+#             totalPdu=data['totalPdu'],
+#             deliverystatus=data['deliverystatus'],
+#             deliverydt=data['deliverydt'],
+#             submitdt=data['submitdt'],
+#             corelationId=data['corelationId'],
+#             message=data['message']
+#         )
+#         db.session.add(new_entry)
+#         db.session.commit()
+#         return jsonify({"message": "Data added successfully"})
 
 
 @app.route("/system_inventry", methods=['POST'])
@@ -144,7 +222,7 @@ def campian():
 
 @app.route('/api/system_inventry', methods=['GET'])
 def get_system_inventry():
-    system= System_inventry.query.all()
+    system = System_inventry.query.all()
     data = [{'sno': item.sno,
              'device_name': item.device_name,
              'storage': item.storage,
@@ -162,7 +240,7 @@ def get_system_inventry():
 @app.route('/api/add_inventory', methods=['POST'])
 def add_system_inventory():
     if request.method == 'POST':
-        data = request.json 
+        data = request.json
         new_inventory = System_inventry(
             device_name=data['device_name'],
             storage=data['storage'],
@@ -177,7 +255,7 @@ def add_system_inventory():
         db.session.add(new_inventory)
         db.session.commit()
         return jsonify({'message': 'System inventory data added successfully'})
-    
+
 
 @app.route("/api/add_stock_mouse", methods=['POST'])
 def add_mouse_stock():
@@ -187,14 +265,12 @@ def add_mouse_stock():
             device_name=data['device_name'],
             brand=data['brand'],
             serial_number=data['serial_number'],
-            quantity=data['quantity'] 
+            quantity=data['quantity']
         )
-       
+
         db.session.add(item)
         db.session.commit()
         return jsonify({'message': 'Mouse stock data added successfully'})
-
-
 
 
 @app.route("/edit/<int:sno>", methods=['GET', 'POST'])
@@ -229,10 +305,12 @@ def editRecord(sno):
 
     return campian()
 
+
 @app.route("/api/get_inventory/<int:sno>", methods=['GET'])
 def get_inventory_item(sno):
     item = System_inventry.query.get(sno)
     return jsonify(item)
+
 
 @app.route("/api/update_inventory/<int:sno>", methods=['POST'])
 def update_inventory_item(sno):
@@ -251,47 +329,21 @@ def update_inventory_item(sno):
         db.session.commit()
         return jsonify({'message': 'Inventory item updated successfully'})
 
-@app.route("/", methods=['POST', 'GET'])
-def login():
-    if (request.method == 'POST'):
-        username = request.form.get('username')
-        password = request.form.get('password')
-        if username == user['username'] and password == user['password']:
-            session['user'] = username
-            flash('This is a flash message')
-            return redirect('/dashboard')
 
-        flash(u'Invalid username  password')
+# @app.route("/dashboard")
+# def dashboard():
+#     total = db.session.query(func.sum(Stock.quantity)).scalar()
+#     total = total or 0
+#     total_sno = db.session.query(func.count(Stock.sno)).scalar()
+#     total_item = db.session.query(func.count(System_inventry.assign)).scalar()
 
-        return render_template("login.html")
-    return render_template("login.html")
+#     quantity = db.session.query(func.count(Mouse.quantity)).scalar()
+#     quantity = quantity or 0
 
-
-@app.route("/layout")
-def layout():
-    return render_template("layout.html")
-
-
-@app.route('/logout')
-def logout():
-    session.pop('user')
-    return redirect('/login')
-
-
-@app.route("/dashboard")
-def dashboard():
-    total = db.session.query(func.sum(Stock.quantity)).scalar()
-    total = total or 0
-    total_sno = db.session.query(func.count(Stock.sno)).scalar()
-    total_item = db.session.query(func.count(System_inventry.assign)).scalar()
-
-    quntity = db.session.query(func.count(Mouse.quantity)).scalar()
-    quntity = quntity or 0
-
-    mouse = Mouse.query.filter_by().all()[0:10]
-    stock = Stock.query.filter_by().all()[0:10]
-    # , stock =stock
-    return render_template("dashboard.html", stock=stock, mouse=mouse, total_sno=total_sno, total=total,  total_item=total_item)
+#     mouse = Mouse.query.filter_by().all()[0:10]
+#     stock = Stock.query.filter_by().all()[0:10]
+#     # , stock =stock
+#     return render_template("dashboard.html", stock=stock, mouse=mouse, total_sno=total_sno, total=total,  total_item=total_item)
 
 
 @app.route('/api/stock')
@@ -311,41 +363,107 @@ def get_mouse_data():
     return jsonify(data)
 
 
-# @app.route("/stock_add", methods=['GET', 'POST'])
-# def stock_add():
-#     if (request.method == 'POST'):
-#         name = request.form.get('name')
-#         brand = request.form.get('brand')
-#         Specification = request.form.get('Specification')
-#         sr_number = request.form.get('sr_number')
-#         other_device = request.form.get('other_device')
-#         quntity = request.form.get('quntity')
+@app.route("/stock_add", methods=['GET', 'POST'])
+def stock_add():
+    if (request.method == 'POST'):
+        name = request.form.get('name')
+        brand = request.form.get('brand')
+        Specification = request.form.get('Specification')
+        sr_number = request.form.get('sr_number')
+        other_device = request.form.get('other_device')
+        quntity = request.form.get('quntity')
 
-#         add_stock = Stock(name=name, brand=brand, Specification=Specification,
-#                           sr_number=sr_number, other_device=other_device, quntity=quntity)
-#         db.session.add(add_stock)
-#         db.session.commit()
-#     return render_template("stock_add.html")
-
-
-# @app.route("/mouse_add", methods=['GET', 'POST'])
-# def mouse_add():
-
-#     if (request.method == 'POST'):
-#         data = request.get_json()
-#         device_name = request.form.get('device_name')
-#         brand = request.form.get('brand')
-#         serial_number = request.form.get('serial_number')
-#         quntity = request.form.get('quntity')
-#         mouse = Mouse(device_name=device_name, brand=brand,
-#                       serial_number=serial_number, quntity=quntity)
-#         db.session.add(mouse)
-#         db.session.commit()
-#     return render_template("mouse_add.html", data=data)
-    # return jsonify(message="Data added successfully" , data=data)
+        add_stock = Stock(name=name, brand=brand, Specification=Specification,
+                          sr_number=sr_number, other_device=other_device, quntity=quntity)
+        db.session.add(add_stock)
+        db.session.commit()
+    return render_template("stock_add.html")
 
 
+@app.route("/mouse_add", methods=['GET', 'POST'])
+def mouse_add():
 
-if __name__ == '__main__':
-   
+    if (request.method == 'POST'):
+        data = request.get_json()
+        device_name = request.form.get('device_name')
+        brand = request.form.get('brand')
+        serial_number = request.form.get('serial_number')
+        quntity = request.form.get('quntity')
+        mouse = Mouse(device_name=device_name, brand=brand,
+                      serial_number=serial_number, quntity=quntity)
+        db.session.add(mouse)
+        db.session.commit()
+    return render_template("mouse_add.html", data=data)
+    return jsonify(message="Data added successfully", data=data)
+
+
+# @app.route("/", methods=['POST', 'GET'])
+# def login():
+#     if request.method == 'POST':
+#         username = request.form.get('username')
+#         password = request.form.get('password')
+#         if username == user['username'] and password == user['password']:
+#             session['user'] = username
+#             flash('This is a flash message')
+#             return redirect('/dashboard')
+
+#         flash(u'Invalid username or password')
+
+#     return render_template("login.html")
+
+
+@app.route("/contribution")
+def contribution_route():
+    return render_template("contribution.html")
+
+
+@app.route("/media")
+def media_route():
+    return render_template("media.html")
+
+
+@app.route("/gallery")
+def gallery_route():
+    return render_template("gallery.html")
+
+
+@app.route("/contect")
+def contect_route():
+    return render_template("contect.html")
+
+
+# @app.route("campaign")
+# def campaign_route():
+#     return render_template("campaign.html")
+
+@app.route("/system_inventry")
+def system_inventry_route():
+    return render_template("system_inventry.html")
+
+
+@app.route("/dashboard")
+def dashboard_route():
+    return render_template("dashboard.html")
+
+
+@app.route("/appreciation")
+def appreciation_route():
+    return render_template("appreciation.html")
+
+
+@app.route("/layout")
+def layout_route():
+    return render_template('layout.html')
+
+
+@app.route('/logout')
+def logout_route():
+    session.pop('user')
+    return redirect('/login')
+
+
+# from controller import *
+
+
+if __name__ == "__main__":
     app.run(debug=True, port=8000)
