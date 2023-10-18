@@ -84,13 +84,14 @@ class User(db.Model):
 with app.app_context():
     db.create_all()
 
-@app.route('/check_database')
-def check_database():
-    data = User.query.all()
-    for entry in data:
-        print(entry.id, entry.username)
+# @app.route('/check_database')
+# def check_database():
 
-    return "Database checked. Check your console for data."
+#     data = User.query.all()
+#     for entry in data:
+#         print(entry.id, entry.username, entry.password)
+
+#     return "Database checked. Check your console for data."
 
 
 @app.route('/register', methods=['POST'])
@@ -118,7 +119,7 @@ def login():
             session['password'] = user.password
             return jsonify({"massage":"login succesfully"})
         else:
-            return jsonify({"massage":"login unsuccesfully"}) 
+            return jsonify({"massage":" unsuccesfully"}) 
 
 
     
