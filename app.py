@@ -1,14 +1,11 @@
 
 
-import bcrypt
-import datetime
 from flask import Flask, flash, jsonify, make_response, render_template, request, url_for,  redirect, session
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_cors import CORS
-import requests
 from sqlalchemy import func
-
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__, template_folder='templats')
 
@@ -16,7 +13,7 @@ app = Flask(__name__, template_folder='templats')
 #     "username": "fonada@125.com", "password": "fonada@123"}
 
 
-app.secret_key ='secret_key'
+app.secret_key = 'secret_key'
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/sdm'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sm'
@@ -24,7 +21,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sm'
 # CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-
+bcrypt = Bcrypt(app)
 
 class System_inventry(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -37,7 +34,7 @@ class System_inventry(db.Model):
     extra_device = db.Column(db.String(50), nullable=False)
     assign = db.Column(db.String(50), nullable=False)
     assign_date = db.Column(db.String(20), nullable=False)
- 
+
 # class Crpm(db.Model):
 #         transactionId = db.Column(db.String,primary_key=True)
 #         recpient = db.Column(db.String(1000), nullable=False)
@@ -69,17 +66,22 @@ class Mouse(db.Model):
     quantity = db.Column(db.String(200), nullable=False)
 
 
+
 class User(db.Model):
+    __tablename__ = 'data'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(45), nullable=False)
     password = db.Column(db.String(45))
 
-    def __init__(self,username,password):
-        self.username =username
+
+
+    def __init__(self, username, password):
+        self.username = username
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-    def chek_password(self,password):
-        return bcrypt.checkpw(password.encode('utf-8'),self.password.encode('utf-8'))
+    def check_password_hash(self, password):
+        return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+
 
 with app.app_context():
     db.create_all()
@@ -100,31 +102,28 @@ def register():
         data = request.json
         username = data['username']
         password = data['password']
-    
+
     new = User(username=username, password=password)
     db.session.add(new)
     db.session.commit()
-    return jsonify({'message': 'User registered successfully'},200)
+    return jsonify({'message': 'User registered successfully'}, 200)
+
+
+
 
 @app.route('/login', methods=['POST'])
 def login():
-        if request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
-
-        user= User.query.filter_by(username=username).first()
-
-        if user and user.check_password(password):
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.check_password_hash( password):
             session['username'] = user.username
             session['password'] = user.password
-            return jsonify({"massage":"login succesfully"})
+           
+            return jsonify({"message": "Login successful"})
         else:
-            return jsonify({"massage":" unsuccesfully"}) 
-
-
+            return jsonify({"message": " Unsuccessful login"})
     
-
-
 
 
 
@@ -177,15 +176,14 @@ def login():
 #              submitdt=submitdt,
 #              corelationId=corelationId,
 #              message=message)
-        
-     
+
+
 #         db.session.add(new_entry)
 #         db.session.commit()
-        
+
 #         return jsonify(make_response({"payload": new_entry.to_json()}, 200))
 
 
-    
 # @app.route('/api/sms', methods=[ 'POST'])
 # def data_add():
 #     if request.method == 'POST':
@@ -205,7 +203,6 @@ def login():
 #         db.session.add(new_entry)
 #         db.session.commit()
 #         return jsonify({"message": "Data added successfully"})
-
 
 
 @app.route("/system_inventry", methods=['POST'])
@@ -234,10 +231,9 @@ def campian():
     return jsonify(system_inventry)
 
 
-
 @app.route('/api/system_inventry', methods=['GET'])
 def get_system_inventry():
-    system= System_inventry.query.all()
+    system = System_inventry.query.all()
     data = [{'sno': item.sno,
              'device_name': item.device_name,
              'storage': item.storage,
@@ -255,7 +251,7 @@ def get_system_inventry():
 @app.route('/api/add_inventory', methods=['POST'])
 def add_system_inventory():
     if request.method == 'POST':
-        data = request.json 
+        data = request.json
         new_inventory = System_inventry(
             device_name=data['device_name'],
             storage=data['storage'],
@@ -270,7 +266,7 @@ def add_system_inventory():
         db.session.add(new_inventory)
         db.session.commit()
         return jsonify({'message': 'System inventory data added successfully'})
-    
+
 
 @app.route("/api/add_stock_mouse", methods=['POST'])
 def add_mouse_stock():
@@ -280,12 +276,13 @@ def add_mouse_stock():
             device_name=data['device_name'],
             brand=data['brand'],
             serial_number=data['serial_number'],
-            quantity=data['quantity'] 
+            quantity=data['quantity']
         )
-       
+
         db.session.add(item)
         db.session.commit()
         return jsonify({'message': 'Mouse stock data added successfully'})
+
 
 @app.route("/edit/<int:sno>", methods=['GET', 'POST'])
 def edit(sno):
@@ -319,17 +316,19 @@ def editRecord(sno):
 
     return campian()
 
+
 @app.route("/api/get_inventory/<int:sno>", methods=['GET'])
 def get_inventory_item(sno):
     item = System_inventry.query.get(sno)
     return jsonify(item)
 
-@app.route ("/api/update_inventory/<int:sno>", methods=['POST'])
+
+@app.route("/api/update_inventory/<int:sno>", methods=['POST'])
 def update_inventory_item(sno):
     if request.method == "POST":
         item = System_inventry.query.get(sno)
         data = request.json
-        item.device_name = data ['device_name']
+        item.device_name = data['device_name']
         item.storage = data['storage']
         item.serial_number = data['serial_number']
         item.ram = data['ram']
@@ -406,15 +405,7 @@ def mouse_add():
         db.session.add(mouse)
         db.session.commit()
     return render_template("mouse_add.html", data=data)
-    return jsonify(message="Data added successfully" , data=data)
-
-
-
-
-
-
-
-
+    return jsonify(message="Data added successfully", data=data)
 
 
 # @app.route("/", methods=['POST', 'GET'])
@@ -432,19 +423,20 @@ def mouse_add():
 #     return render_template("login.html")
 
 
-
-
 @app.route("/contribution")
 def contribution_route():
     return render_template("contribution.html")
+
 
 @app.route("/media")
 def media_route():
     return render_template("media.html")
 
+
 @app.route("/gallery")
 def gallery_route():
     return render_template("gallery.html")
+
 
 @app.route("/contect")
 def contect_route():
@@ -464,9 +456,11 @@ def system_inventry_route():
 def dashboard_route():
     return render_template("dashboard.html")
 
+
 @app.route("/appreciation")
 def appreciation_route():
     return render_template("appreciation.html")
+
 
 @app.route("/layout")
 def layout_route():
@@ -482,9 +476,5 @@ def logout_route():
 # from controller import *
 
 
-
-
 if __name__ == "__main__":
-    app.run(debug=True, port= 8000)
-
-
+    app.run(debug=True, port=8000)
