@@ -1,11 +1,11 @@
 
-
+import bcrypt
 from flask import Flask, flash, jsonify, make_response, render_template, request, url_for,  redirect, session
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_cors import CORS
 from sqlalchemy import func
-from flask_bcrypt import Bcrypt
+import logging
 
 app = Flask(__name__, template_folder='templats')
 
@@ -21,7 +21,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sm'
 # CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
+
+
 
 class System_inventry(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -68,19 +69,26 @@ class Mouse(db.Model):
 
 
 class User(db.Model):
-    __tablename__ = 'data'
+    __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(45), nullable=False)
+    last_name = db.Column(db.String(45), nullable=False)
+    phone_no = db.Column(db.String(45), nullable=False)
     username = db.Column(db.String(45), nullable=False)
     password = db.Column(db.String(45))
 
 
 
-    def __init__(self, username, password):
+    def __init__(self,first_name,last_name,phone_no, username, password):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.phone_no = phone_no
         self.username = username
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    
+    def check_password(self, password):
+     return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
-    def check_password_hash(self, password):
-        return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
 
 
 with app.app_context():
@@ -96,33 +104,40 @@ with app.app_context():
 #     return "Database checked. Check your console for data."
 
 
+
 @app.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
         data = request.json
+        first_name = data['first_name']
+        last_name = data['last_name']
+        phone_no = data['phone_no']
         username = data['username']
         password = data['password']
 
-    new = User(username=username, password=password)
-    db.session.add(new)
-    db.session.commit()
-    return jsonify({'message': 'User registered successfully'}, 200)
+        new_user = User(first_name=first_name, last_name=last_name, phone_no=phone_no, username=username, password=password)
+
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify({'message': 'User registered successfully'}, 200)
 
 
 
 
 @app.route('/login', methods=['POST'])
 def login():
+    if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and user.check_password_hash( password):
+
+        if user and user.check_password(password):  
             session['username'] = user.username
-            session['password'] = user.password
-           
             return jsonify({"message": "Login successful"})
         else:
-            return jsonify({"message": " Unsuccessful login"})
+            return jsonify({"message": "Unsuccessful"})
+
+    return "This is the login page."
     
 
 
