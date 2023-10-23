@@ -84,12 +84,11 @@ class User(db.Model):
         self.last_name = last_name
         self.phone_no = phone_no
         self.username = username
-        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        self.password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
     
     def check_password(self, password):
      return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
-
-
+    
 
 with app.app_context():
     db.create_all()
@@ -130,9 +129,11 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-
-        if user and user.check_password(password):  
-            session['username'] = user.username
+        print(user.password)
+        
+        if user and password==user.check_password(password):
+            session['username'] = username
+            session['password'] = password
             return jsonify({"message": "Login successful"})
         else:
             return jsonify({"message": "Unsuccessful"})
