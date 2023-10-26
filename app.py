@@ -132,6 +132,9 @@ def login():
         
         user = User.query.filter_by(username=username).first()
 
+        print(user.username)
+        print(user.password)
+        
         if user and user.check_password(password):
             session['username'] = user.username
             session['password'] = user.password  
