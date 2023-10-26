@@ -87,7 +87,7 @@ class User(db.Model):
         self.password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
     
     def check_password(self, password):
-     return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+       return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
     
 
 with app.app_context():
@@ -114,7 +114,8 @@ def register():
         username = data['username']
         password = data['password']
 
-        new_user = User(first_name=first_name, last_name=last_name, phone_no=phone_no, username=username, password=password)
+        new_user = User(first_name=first_name, last_name=last_name, phone_no=phone_no,
+                         username=username, password=password)
 
         db.session.add(new_user)
         db.session.commit()
@@ -128,12 +129,12 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        print(user.password)
         
-        if user and password==user.check_password(password):
-            session['username'] = username
-            session['password'] = password
+        user = User.query.filter_by(username=username).first()
+
+        if user and user.check_password(password):
+            session['username'] = user.username
+            session['password'] = user.password  
             return jsonify({"message": "Login successful"})
         else:
             return jsonify({"message": "Unsuccessful"})
