@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_cors import CORS
 from sqlalchemy import func
-import logging
+from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__, template_folder='templats')
 
@@ -79,19 +79,10 @@ class User(db.Model):
 
 
 
-    def __init__(self,first_name,last_name,phone_no, username, password):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.phone_no = phone_no
-        self.username = username
-        self.password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt()).decode('utf-8')
-    
-    def check_password(self, password):
-       return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
-    
+ 
 
-with app.app_context():
-    db.create_all()
+# with app.app_context():
+#     db.create_all()
 
 # @app.route('/check_database')
 # def check_database():
@@ -113,9 +104,9 @@ def register():
         phone_no = data['phone_no']
         username = data['username']
         password = data['password']
-
+        hashed_password = generate_password_hash(password)
         new_user = User(first_name=first_name, last_name=last_name, phone_no=phone_no,
-                         username=username, password=password)
+                         username=username, password=hashed_password)
 
         db.session.add(new_user)
         db.session.commit()
@@ -124,7 +115,7 @@ def register():
 
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
@@ -132,15 +123,12 @@ def login():
         
         user = User.query.filter_by(username=username).first()
 
-        print(user.username)
-        print(user.password)
-        
-        if user and user.check_password(password):
-            session['username'] = user.username
-            session['password'] = user.password  
-            return jsonify({"message": "Login successful"})
+        if user and check_password_hash(user.password, password):
+            session['username'] = username
+            session['password'] = password
+            return "Login successful"
         else:
-            return jsonify({"message": "Unsuccessful"})
+            return "Login failed"
 
     return "This is the login page."
     
