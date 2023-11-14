@@ -12,8 +12,7 @@ app = Flask(__name__, template_folder='templats')
 # app.secret_key = user = {
 #     "username": "fonada@125.com", "password": "fonada@123"}
 
-
-app.secret_key = 'secret_key'
+app.secret_key = 'your_secret_key' 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/sdm'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sm'
@@ -21,6 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/sm'
 # CORS(app, resources={r"/api/*": {"origins": "http://localhost:4200"}})
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
 
 
 
@@ -74,7 +74,7 @@ class User(db.Model):
     first_name = db.Column(db.String(45), nullable=False)
     last_name = db.Column(db.String(45), nullable=False)
     phone_no = db.Column(db.String(45), nullable=False)
-    username = db.Column(db.String(45), nullable=False)
+    email = db.Column(db.String(45), nullable=False)
     password = db.Column(db.String(45))
 
 
@@ -102,11 +102,11 @@ def register():
         first_name = data['first_name']
         last_name = data['last_name']
         phone_no = data['phone_no']
-        username = data['username']
+        email = data['email']
         password = data['password']
         hashed_password = generate_password_hash(password)
         new_user = User(first_name=first_name, last_name=last_name, phone_no=phone_no,
-                         username=username, password=hashed_password)
+                         email=email, password=hashed_password)
 
         db.session.add(new_user)
         db.session.commit()
@@ -114,26 +114,26 @@ def register():
 
 
 
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
+@app.route('/login', methods=['POST'])
+def login_route():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
         
-        user = User.query.filter_by(username=username).first()
+        email = request.form['email']
+        passwords = request.form['password']
 
-        if user and check_password_hash(user.password, password):
-            session['username'] = username
-            session['password'] = password
-            return "Login successful"
+        user = User.query.filter_by(email=email).first()
+        print({user.email})
+        print({passwords})
+        if user and user.check_password_hash(user.password, passwords):   
+            return "login"
         else:
-            return "Login failed"
+            return "Login failed. Please try again."
+        
+            
 
-    return "This is the login page."
-    
-
-
+@app.route('/dash')
+def dash():
+    return "This is dashboard"
 
 # @app.route('/api/sms', methods=['GET'])
 # def sms():
