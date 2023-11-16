@@ -1,4 +1,5 @@
 
+from datetime import datetime, timedelta
 import bcrypt
 from flask import Flask, flash, jsonify, make_response, render_template, request, url_for,  redirect, session
 from flask_sqlalchemy import SQLAlchemy
@@ -124,9 +125,24 @@ def login_route():
             if user and user.check_password(password):   
                 session['email']=email
                 session['password']=password
-                return "login"
+                
+                key = "secret"
+                exp_time= datetime.now() + timedelta(minutes=15)
+                exp_epoch_time= int(exp_time.timestamp())
+                
+                payload ={
+                    "payload": user.email,
+                    "phoneno":user.phone_no,
+                    "exp":exp_epoch_time
+                }
+                print(payload)
+               
+                encoded = jwt.encode(payload, key, algorithm="HS256")
+            
+                return make_response({"token" :encoded},200)
+              
             else:
-                return "Invalid data"
+                return  make_response({"token" :"Unauthorized"},401)
         except:
             return "Login failed. Please try again."
         
