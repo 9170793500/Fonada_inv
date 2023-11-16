@@ -2,10 +2,10 @@
 import bcrypt
 from flask import Flask, flash, jsonify, make_response, render_template, request, url_for,  redirect, session
 from flask_sqlalchemy import SQLAlchemy
-
+import jwt
 from flask_cors import CORS
 from sqlalchemy import func
-from werkzeug.security import check_password_hash, generate_password_hash
+# from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__, template_folder='templats')
 
@@ -79,19 +79,15 @@ class User(db.Model):
 
 
 
- 
+    def __init__(self,first_name,last_name,phone_no, email, password):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.phone_no = phone_no
+        self.email = email
+        self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
-# with app.app_context():
-#     db.create_all()
-
-# @app.route('/check_database')
-# def check_database():
-
-#     data = User.query.all()
-#     for entry in data:
-#         print(entry.id, entry.username, entry.password)
-
-#     return "Database checked. Check your console for data."
+    def check_password(self, password):
+        return bcrypt.checkpw(password.encode('utf-8'),self.password.encode('utf-8'))
 
 
 
@@ -104,9 +100,9 @@ def register():
         phone_no = data['phone_no']
         email = data['email']
         password = data['password']
-        hashed_password = generate_password_hash(password)
+       
         new_user = User(first_name=first_name, last_name=last_name, phone_no=phone_no,
-                         email=email, password=hashed_password)
+                         email=email, password=password)
 
         db.session.add(new_user)
         db.session.commit()
@@ -119,14 +115,19 @@ def login_route():
     if request.method == 'POST':
         
         email = request.form['email']
-        passwords = request.form['password']
+        password = request.form['password']
+
 
         user = User.query.filter_by(email=email).first()
-        print({user.email})
-        print({passwords})
-        if user and user.check_password_hash(user.password, passwords):   
-            return "login"
-        else:
+        # token = jwt.encode(payload,"Sundram", algorithm="HS256")
+        try: 
+            if user and user.check_password(password):   
+                session['email']=email
+                session['password']=password
+                return "login"
+            else:
+                return "Invalid data"
+        except:
             return "Login failed. Please try again."
         
             
