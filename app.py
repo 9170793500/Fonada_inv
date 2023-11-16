@@ -139,18 +139,19 @@ def login_route():
                
                 encoded = jwt.encode(payload, key, algorithm="HS256")
             
-                return make_response({"token" :encoded},200)
+                return make_response({"token" :encoded}, 200)
               
             else:
-                return  make_response({"token" :"Unauthorized"},401)
+                return  make_response({"token" :"Unauthorized"}, 401)
         except:
             return "Login failed. Please try again."
         
             
+@app.route("/forget", methods=['POST'])
+def forget_data():
+    
+    return make_response ({"token":"forget"})
 
-@app.route('/dash')
-def dash():
-    return "This is dashboard"
 
 # @app.route('/api/sms', methods=['GET'])
 # def sms():
